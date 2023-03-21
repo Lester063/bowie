@@ -20,6 +20,11 @@
                         <x-nav-link href="{{ route('item.index') }}">
                             {{ __('Item') }}
                         </x-nav-link>
+
+                        <x-nav-link href="{{ route('request.index') }}">
+                            {{ __('Request') }}
+                        </x-nav-link>
+
                     </div>
                 </div>
 
