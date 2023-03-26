@@ -42,6 +42,9 @@ Route::middleware('splade')->group(function () {
         Route::resource('/item',InventoryController::class);
         Route::resource('/request',UserRequestController::class);
 
+        Route::get('/potaka',[UserRequestController::class, 'shet']);
+
+
 
         
 
@@ -51,4 +54,5 @@ Route::middleware('splade')->group(function () {
     });
 
     require __DIR__.'/auth.php';
+    require __DIR__.'/admin.php';
 });

@@ -14,6 +14,7 @@ class ProfileController extends Controller
      *
      * @return \Illuminate\View\View
      */
+
     public function edit(Request $request)
     {
         return view('profile.edit', [

@@ -17,6 +17,10 @@ class InventoryController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function indexx(Request $request)
+    {
+        return 'admin';
+    }
     public function index(Request $request)
     {
         $globalSearch = AllowedFilter::callback('global', function ($query, $value) {

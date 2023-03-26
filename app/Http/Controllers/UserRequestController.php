@@ -12,7 +12,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Support\Collection;
 use ProtoneMedia\Splade\Facades\Toast;
 use App\Models\Inventory;
-
+use Auth;
 class UserRequestController extends Controller
 {
     /**
@@ -67,9 +67,9 @@ class UserRequestController extends Controller
             'item_id'=>'required',
             'user_id'=>'required',
         ]);
-        $verify = UserRequest::where('item_id', $request->item_id)->exists();
-        if($verify) {
-            Toast::warning('Item does not exist.');
+        $verify = Inventory::find($request->item_id);
+        if($verify['status']=='PROCESSED') {
+            Toast::warning('Item has been added to other user.');
         }
         else {
             $user_request=UserRequest::create([
@@ -135,5 +135,39 @@ class UserRequestController extends Controller
         $user_request->delete();
         Toast::title('Request was deleted successfully.');
         return redirect()->route('request.index');
+    }
+
+    //user request controller
+    public function shet(Request $request){
+        $auth_id=Auth::id();
+        // $isUserRequest=UserRequest::where('user_id','4')->get();
+        // return view('user.index',compact('isUserRequest'));
+
+        $globalSearch = AllowedFilter::callback('global', function ($query, $value) {
+            $query->where(function ($query) use ($value) {
+                Collection::wrap($value)->each(function ($value) use ($query) {
+                    $query
+                        ->orWhere('status', 'LIKE', "%{$value}%")
+                        ->orWhere('item_id', 'LIKE', "%{$value}%");
+                });
+            });
+        });
+
+        $user_request = QueryBuilder::for(UserRequest::where('user_id',$auth_id))
+        ->defaultSort('status')
+        ->allowedSorts(['status', 'item_id'])
+        ->allowedFilters(['status', 'item_id', $globalSearch])
+        ->paginate(5)
+        ->withQueryString();
+
+        return view('user.index', [
+            'user_request' => SpladeTable::for($user_request)
+            ->defaultSort('status')
+            ->withGlobalSearch()
+            ->column('status', sortable : true, searchable: true)
+            ->column('item_id', sortable : true, searchable: true)
+            ->column('user_id', sortable : true, searchable: true)
+            ->column('action'),
+        ]);
     }
 }
