@@ -46,6 +46,7 @@ class InventoryController extends Controller
             ->withGlobalSearch()
             ->column('item_name', sortable : true, searchable: true)
             ->column('item_code', sortable : true, searchable: true)
+            ->column('status', sortable : true, searchable: true)
             ->column('action'),
         ]);
     }
@@ -137,4 +138,38 @@ class InventoryController extends Controller
         Toast::title('Item was deleted successfully.');
         return redirect()->route('item.index');
     }
+
+    public function availableitem(Request $request){
+        $globalSearch = AllowedFilter::callback('global', function ($query, $value) {
+            $query->where(function ($query) use ($value) {
+                Collection::wrap($value)->each(function ($value) use ($query) {
+                    $query
+                        ->orWhere('item_name', 'LIKE', "%{$value}%")
+                        ->orWhere('item_code', 'LIKE', "%{$value}%");
+                });
+            });
+        });
+
+        $item = QueryBuilder::for(Inventory::where('status','AVAILABLE'))
+        ->defaultSort('item_name')
+        ->allowedSorts(['item_name', 'item_code'])
+        ->allowedFilters(['item_name', 'item_code', $globalSearch])
+        ->paginate(5)
+        ->withQueryString();
+
+        return view('user.useritem', [
+            'item' => SpladeTable::for($item)
+            ->defaultSort('item_name')
+            ->withGlobalSearch()
+            ->column('item_name', sortable : true, searchable: true)
+            ->column('item_code', sortable : true, searchable: true)
+            ->column('action'),
+        ]);
+    }
+
+    public function requestitem(){
+        //requestitem/{{$item->id}}
+        return $id;
+    }
+
 }

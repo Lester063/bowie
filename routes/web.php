@@ -42,7 +42,16 @@ Route::middleware('splade')->group(function () {
         Route::resource('/item',InventoryController::class);
         Route::resource('/request',UserRequestController::class);
 
-        Route::get('/potaka',[UserRequestController::class, 'shet']);
+        //user view own request
+        Route::get('/userrequest',[UserRequestController::class, 'userrequest']);
+
+        //view available item
+        Route::get('/availableitem',[InventoryController::class, 'availableitem']);
+
+        //request the item -user
+        Route::get('/requestitem/{$id}',[InventoryController::class, 'requestitem']);
+        //request it
+        Route::get('/shet',[InventoryController::class, 'shet']);
 
 
 

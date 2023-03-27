@@ -138,7 +138,7 @@ class UserRequestController extends Controller
     }
 
     //user request controller
-    public function shet(Request $request){
+    public function userrequest(Request $request){
         $auth_id=Auth::id();
         // $isUserRequest=UserRequest::where('user_id','4')->get();
         // return view('user.index',compact('isUserRequest'));
@@ -167,7 +167,7 @@ class UserRequestController extends Controller
             ->column('status', sortable : true, searchable: true)
             ->column('item_id', sortable : true, searchable: true)
             ->column('user_id', sortable : true, searchable: true)
-            ->column('action'),
         ]);
     }
+
 }

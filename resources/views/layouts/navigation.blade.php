@@ -26,6 +26,15 @@
                         </x-nav-link>
                         @endif
 
+                        @if(!auth()->user()->is_admin)
+                        <x-nav-link href="/availableitem">
+                            {{ __('Available Item') }}
+                        </x-nav-link>
+                        <x-nav-link href="/userrequest">
+                            {{ __('Request') }}
+                        </x-nav-link>
+                        @endif
+
                     </div>
                 </div>
 
