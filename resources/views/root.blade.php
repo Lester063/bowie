@@ -18,4 +18,24 @@
     <body class="font-sans antialiased">
         @splade
     </body>
+
+<script>
+    function ehe(){
+        var item_id = document.getElementById("item_id").value;
+        var user_id = document.getElementById("user_id").value;
+
+        $.ajax({
+        type:"POST",
+        url: "{{route('user.request')}}",
+        data:{
+            'item_id':item_id,
+            'user_id':user_id,
+        },
+            success:function(response){
+                alert('ehe');
+            }
+        }
+    }
+</script>
+
 </html>

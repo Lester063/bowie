@@ -43,13 +43,13 @@ Route::middleware('splade')->group(function () {
         Route::resource('/request',UserRequestController::class);
 
         //user view own request
-        Route::get('/userrequest',[UserRequestController::class, 'userrequest']);
+        Route::get('/userrequest',[UserRequestController::class, 'userrequest'])->name('user.userrequest');
 
         //view available item
-        Route::get('/availableitem',[InventoryController::class, 'availableitem']);
+        Route::get('/availableitem',[InventoryController::class, 'availableitem'])->name('user.availableitem');
 
         //request the item -user
-        Route::get('/requestitem/{$id}',[InventoryController::class, 'requestitem']);
+        Route::post('/requestitem',[UserRequestController::class, 'requestitem'])->name('user.request');
         //request it
         Route::get('/shet',[InventoryController::class, 'shet']);
 

@@ -170,4 +170,32 @@ class UserRequestController extends Controller
         ]);
     }
 
+    public function requestitem(Request $request){
+        $item_id=$request->item_id;
+        $user_id=$request->user_id;
+
+            $verify = Inventory::find($request->item_id);
+            $verify2 = UserRequest::where('item_id', $request->item_id)->where('user_id', $request->user_id)->where('status', 'PENDING')->exists();
+            if($verify['status']=='PROCESSED') {
+                Toast::warning('Item has been added to other user.');
+                return redirect()->route('user.availableitem');
+            }
+            else if($verify2){
+                Toast::warning('You have requested this item already.');
+                return redirect()->route('user.availableitem');
+            }
+            else {
+                $user_request=UserRequest::create([
+                    'item_id'=>$request['item_id'],
+                    'user_id'=>$request['user_id'],
+                    'status'=>'PENDING',
+                ]);
+                Toast::title('Request added successfully');
+                return redirect()->route('user.userrequest');
+            }
+            
+        
+
+    }
+
 }

@@ -140,6 +140,9 @@ class InventoryController extends Controller
     }
 
     public function availableitem(Request $request){
+
+
+        
         $globalSearch = AllowedFilter::callback('global', function ($query, $value) {
             $query->where(function ($query) use ($value) {
                 Collection::wrap($value)->each(function ($value) use ($query) {
