@@ -10,8 +10,8 @@
                         <option value="PROCESSING">PROCESSING</option>
                         <option value="PROCESSED">PROCESSED</option>
                     </x-splade-select>
-                    <x-splade-input name="item_id" label="Item id" />
-                    <x-splade-input name="user_id" label="User id" />
+                    <x-splade-input name="item_id" label="Item id" type="hidden"/>
+                    <x-splade-input name="user_id" label="User id" type="hidden" />
                     
                     <x-splade-submit class="mt-3" />
                 </x-splade-form>

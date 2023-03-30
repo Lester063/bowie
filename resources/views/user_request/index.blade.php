@@ -2,7 +2,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
+            {{ __('Request -Admin') }}
         </h2>
     </x-slot>
 
@@ -12,8 +12,8 @@
         </Link>
         <x-splade-table :for="$user_request">
             @cell('action', $user_request)
-                <Link modal href="{{ route('request.edit', $user_request->id)}}" class="btn btn-primary">
-                    Edit {{$user_request->id}}
+                <Link modal href="{{ route('request.edit', $user_request->ur_id)}}" class="btn btn-primary">
+                    Edit {{$user_request->ur_id}}
                 </Link>
                 <x-splade-form method="DELETE" :action="route('request.destroy',$user_request->id)" confirm>
                     <x-splade-submit style="background-color:red">Delete</x-splade-submit>

@@ -34,9 +34,9 @@ class InventoryController extends Controller
         });
 
         $item = QueryBuilder::for(Inventory::class)
-        ->defaultSort('item_name')
+        ->defaultSort('-created_at')
         ->allowedSorts(['item_name', 'item_code'])
-        ->allowedFilters(['item_name', 'item_code', $globalSearch])
+        ->allowedFilters(['item_name', 'item_code','status', $globalSearch])
         ->paginate(5)
         ->withQueryString();
 
@@ -98,12 +98,7 @@ class InventoryController extends Controller
      */
     public function edit(Inventory $item)
     {
-        // $id=$id;
-        // $item=Item::find($id);
-        // $item = Item::where('item_id',$id)->get();
         return view('item.edit',compact('item'));
-        // return view('item.edit')->with('item',$item);
-        // return view('item.edit', $item);
     }
 
     /**
@@ -139,10 +134,9 @@ class InventoryController extends Controller
         return redirect()->route('item.index');
     }
 
+
+    //#user
     public function availableitem(Request $request){
-
-
-        
         $globalSearch = AllowedFilter::callback('global', function ($query, $value) {
             $query->where(function ($query) use ($value) {
                 Collection::wrap($value)->each(function ($value) use ($query) {
@@ -168,11 +162,6 @@ class InventoryController extends Controller
             ->column('item_code', sortable : true, searchable: true)
             ->column('action'),
         ]);
-    }
-
-    public function requestitem(){
-        //requestitem/{{$item->id}}
-        return $id;
     }
 
 }

@@ -50,8 +50,6 @@ Route::middleware('splade')->group(function () {
 
         //request the item -user
         Route::post('/requestitem',[UserRequestController::class, 'requestitem'])->name('user.request');
-        //request it
-        Route::get('/shet',[InventoryController::class, 'shet']);
 
 
 

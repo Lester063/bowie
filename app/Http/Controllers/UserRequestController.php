@@ -24,26 +24,28 @@ class UserRequestController extends Controller
             $query->where(function ($query) use ($value) {
                 Collection::wrap($value)->each(function ($value) use ($query) {
                     $query
-                        ->orWhere('status', 'LIKE', "%{$value}%")
-                        ->orWhere('item_id', 'LIKE', "%{$value}%");
+                        ->orWhere('user_requests.status', 'LIKE', "%{$value}%")
+                        ->orWhere('users.name', 'LIKE', "%{$value}%");
                 });
             });
         });
-
-        $user_request = QueryBuilder::for(UserRequest::class)
-        ->defaultSort('status')
-        ->allowedSorts(['status', 'item_id'])
-        ->allowedFilters(['status', 'item_id', $globalSearch])
+        $user_request = QueryBuilder::for(UserRequest::class)->join('inventories', 'inventories.id','=','user_requests.item_id')
+        ->join('users', 'users.id','=','user_requests.user_id')
+        ->select('*','user_requests.id as ur_id', 'user_requests.status as ur_status')
+        ->defaultSort('-user_requests.created_at')
+        ->allowedSorts(['ur_status', 'name'])
+        ->allowedFilters(['ur_status', 'name', $globalSearch])
         ->paginate(5)
         ->withQueryString();
 
         return view('user_request.index', [
             'user_request' => SpladeTable::for($user_request)
-            ->defaultSort('status')
+            ->defaultSort('ur_status')
             ->withGlobalSearch()
-            ->column('status', sortable : true, searchable: true)
-            ->column('item_id', sortable : true, searchable: true)
-            ->column('user_id', sortable : true, searchable: true)
+            ->column('name', sortable : true, searchable: true)
+            ->column('item_name')
+            ->column('item_code')
+            ->column('ur_status', sortable : true, searchable: true)
             ->column('action'),
         ]);
     }
@@ -53,8 +55,6 @@ class UserRequestController extends Controller
      */
     public function create()
     {
-        // $item=Inventory::all();
-        // ->with('item',$item)
         return view('user_request.create');
     }
 
@@ -116,6 +116,10 @@ class UserRequestController extends Controller
             Toast::warning("Item not available at the moment.");
             return redirect()->route('request.index');
         }
+        if ($verify && $item['status'] === 'PROCESSING' && $user_request['status'] != 'PROCESSING') {
+            Toast::warning("Item has been processing with other user.");
+            return redirect()->route('request.index');
+        }
         else{
             $user_request->update($request->all());
             $item->update([
@@ -140,8 +144,6 @@ class UserRequestController extends Controller
     //user request controller
     public function userrequest(Request $request){
         $auth_id=Auth::id();
-        // $isUserRequest=UserRequest::where('user_id','4')->get();
-        // return view('user.index',compact('isUserRequest'));
 
         $globalSearch = AllowedFilter::callback('global', function ($query, $value) {
             $query->where(function ($query) use ($value) {
@@ -153,10 +155,11 @@ class UserRequestController extends Controller
             });
         });
 
-        $user_request = QueryBuilder::for(UserRequest::where('user_id',$auth_id))
-        ->defaultSort('status')
-        ->allowedSorts(['status', 'item_id'])
-        ->allowedFilters(['status', 'item_id', $globalSearch])
+        $user_request = QueryBuilder::for(UserRequest::where('user_id',$auth_id))->join('inventories', 'inventories.id','=','user_requests.item_id')
+        ->select('*','user_requests.status as ur_status')
+        ->defaultSort('user_requests.status')
+        ->allowedSorts(['ur_status', 'item_name'])
+        ->allowedFilters(['ur_status', 'item_name', $globalSearch])
         ->paginate(5)
         ->withQueryString();
 
@@ -164,9 +167,9 @@ class UserRequestController extends Controller
             'user_request' => SpladeTable::for($user_request)
             ->defaultSort('status')
             ->withGlobalSearch()
-            ->column('status', sortable : true, searchable: true)
-            ->column('item_id', sortable : true, searchable: true)
-            ->column('user_id', sortable : true, searchable: true)
+            ->column('item_name', sortable : true, searchable: true)
+            ->column('item_code')
+            ->column('ur_status', sortable : true, searchable: true)
         ]);
     }
 
