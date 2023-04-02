@@ -11,6 +11,17 @@
                     Create
         </Link>
         <x-splade-table :for="$user_request">
+            @cell('users.name', $user_request)
+                <p>{{$user_request['name']}}</p>
+            @endcell
+            @cell('user_requests.status', $user_request)
+                @if($user_request['ur_status'] == 'PROCESSED')
+                    <p style='background-color:green;color:#fff;width:fit-content;padding:5px;border-radius:5px;'>{{$user_request['ur_status']}}</p>
+                @else
+                    <p style='background-color:red;color:#fff;width:fit-content;padding:5px;border-radius:5px;'>{{$user_request['ur_status']}}</p>
+                @endif
+    
+            @endcell
             @cell('action', $user_request)
                 <Link modal href="{{ route('request.edit', $user_request->ur_id)}}" class="btn btn-primary">
                     Edit {{$user_request->ur_id}}

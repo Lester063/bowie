@@ -31,10 +31,10 @@ class UserRequestController extends Controller
         });
         $user_request = QueryBuilder::for(UserRequest::class)->join('inventories', 'inventories.id','=','user_requests.item_id')
         ->join('users', 'users.id','=','user_requests.user_id')
-        ->select('*','user_requests.id as ur_id', 'user_requests.status as ur_status')
+        ->select('*','user_requests.id as ur_id', 'user_requests.status as ur_status', 'users.name as u_name')
         ->defaultSort('-user_requests.created_at')
-        ->allowedSorts(['ur_status', 'name'])
-        ->allowedFilters(['ur_status', 'name', $globalSearch])
+        ->allowedSorts(['user_requests.status', 'users.name'])
+        ->allowedFilters(['user_requests.status', 'users.name', $globalSearch])
         ->paginate(5)
         ->withQueryString();
 
@@ -42,10 +42,10 @@ class UserRequestController extends Controller
             'user_request' => SpladeTable::for($user_request)
             ->defaultSort('ur_status')
             ->withGlobalSearch()
-            ->column('name', sortable : true, searchable: true)
+            ->column('users.name', sortable : true, searchable: true)
             ->column('item_name')
             ->column('item_code')
-            ->column('ur_status', sortable : true, searchable: true)
+            ->column('user_requests.status', sortable : true, searchable: true)
             ->column('action'),
         ]);
     }
@@ -109,14 +109,14 @@ class UserRequestController extends Controller
             'item_id' => 'required',
             'user_id' => 'required',
         ]);
-        $verify = Inventory::where('id', $request->item_id)->exists();
+        $isExist = Inventory::where('id', $request->item_id)->exists();
         $item=Inventory::find($request->item_id);
         $user_request=UserRequest::find($id);
-        if ($verify && $item['status'] === 'PROCESSED') {
+        if ($isExist &&$item['status'] === 'PROCESSED' && $user_request['status']!='PROCESSED') {
             Toast::warning("Item not available at the moment.");
             return redirect()->route('request.index');
         }
-        if ($verify && $item['status'] === 'PROCESSING' && $user_request['status'] != 'PROCESSING') {
+        if ($isExist && $item['status'] === 'PROCESSING' && $user_request['status'] != 'PROCESSING') {
             Toast::warning("Item has been processing with other user.");
             return redirect()->route('request.index');
         }
@@ -125,6 +125,11 @@ class UserRequestController extends Controller
             $item->update([
                 'status'=>$request->status
             ]);
+            if($request->is_returned=='1') {
+                $item->update([
+                    'status'=>'AVAILABLE'
+                ]);
+            }
             Toast::title('Request updated successfully.');
             return redirect()->route('request.index');
         }
@@ -192,6 +197,7 @@ class UserRequestController extends Controller
                     'item_id'=>$request['item_id'],
                     'user_id'=>$request['user_id'],
                     'status'=>'PENDING',
+                    'is_returned'=>'0'
                 ]);
                 Toast::title('Request added successfully');
                 return redirect()->route('user.userrequest');

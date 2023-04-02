@@ -10,6 +10,12 @@
                         <option value="PROCESSING">PROCESSING</option>
                         <option value="PROCESSED">PROCESSED</option>
                     </x-splade-select>
+                    @if($user_request['status'] == 'PROCESSED') 
+                    <x-splade-select name="is_returned" class="mt-3">
+                        <option value="0">NOT YET</option>
+                        <option value="1">YES</option>
+                    </x-splade-select>
+                    @endif
                     <x-splade-input name="item_id" label="Item id" type="hidden"/>
                     <x-splade-input name="user_id" label="User id" type="hidden" />
                     

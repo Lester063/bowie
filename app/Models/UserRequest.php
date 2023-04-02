@@ -11,6 +11,7 @@ class UserRequest extends Model
     protected $fillable = [
         'item_id',
         'user_id',
-        'status'
+        'status',
+        'is_returned'
     ];
 }

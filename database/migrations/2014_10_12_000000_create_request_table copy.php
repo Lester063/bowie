@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('item_id');
             $table->string('user_id');
             $table->string('status');
+            $table->string('is_returned');
             $table->timestamps();
         });
     }

@@ -28,14 +28,15 @@ class InventoryController extends Controller
                 Collection::wrap($value)->each(function ($value) use ($query) {
                     $query
                         ->orWhere('item_name', 'LIKE', "%{$value}%")
-                        ->orWhere('item_code', 'LIKE', "%{$value}%");
+                        ->orWhere('item_code', 'LIKE', "%{$value}%")
+                        ->orWhere('status', 'LIKE', "%{$value}%");
                 });
             });
         });
 
         $item = QueryBuilder::for(Inventory::class)
         ->defaultSort('-created_at')
-        ->allowedSorts(['item_name', 'item_code'])
+        ->allowedSorts(['item_name', 'item_code','status'])
         ->allowedFilters(['item_name', 'item_code','status', $globalSearch])
         ->paginate(5)
         ->withQueryString();
