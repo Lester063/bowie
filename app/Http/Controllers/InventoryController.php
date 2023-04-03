@@ -34,7 +34,7 @@ class InventoryController extends Controller
             });
         });
 
-        $item = QueryBuilder::for(Inventory::class)
+        $item = QueryBuilder::for(Inventory::class)->where('is_deleted','0')
         ->defaultSort('-created_at')
         ->allowedSorts(['item_name', 'item_code','status'])
         ->allowedFilters(['item_name', 'item_code','status', $globalSearch])
@@ -79,6 +79,7 @@ class InventoryController extends Controller
                 'item_name'=>$request['item_name'],
                 'item_code'=>$request['item_code'],
                 'status'=>'AVAILABLE',
+                'is_deleted'=>'0',
             ]);
             Toast::title('Item added successfully.');
         }
@@ -130,7 +131,9 @@ class InventoryController extends Controller
     public function destroy(string $id): RedirectResponse
     {
         $item=Inventory::find($id);
-        $item->delete();
+        $item->update([
+            'is_deleted'=>'1'
+        ]);
         Toast::title('Item was deleted successfully.');
         return redirect()->route('item.index');
     }
@@ -148,7 +151,7 @@ class InventoryController extends Controller
             });
         });
 
-        $item = QueryBuilder::for(Inventory::where('status','AVAILABLE'))
+        $item = QueryBuilder::for(Inventory::where('status','AVAILABLE')->where('is_deleted','0'))
         ->defaultSort('item_name')
         ->allowedSorts(['item_name', 'item_code'])
         ->allowedFilters(['item_name', 'item_code', $globalSearch])

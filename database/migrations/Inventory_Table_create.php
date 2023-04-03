@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('item_name');
             $table->string('item_code');
             $table->string('status');
+            $table->string('is_deleted');
             $table->timestamps();
         });
     }

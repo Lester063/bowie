@@ -4,7 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\UserRequestController;
-
+use App\Http\Controllers\DeletedItemController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,6 +41,7 @@ Route::middleware('splade')->group(function () {
 
         Route::resource('/item',InventoryController::class);
         Route::resource('/request',UserRequestController::class);
+        Route::resource('/deleteditem',DeletedItemController::class);
 
         //user view own request
         Route::get('/userrequest',[UserRequestController::class, 'userrequest'])->name('user.userrequest');

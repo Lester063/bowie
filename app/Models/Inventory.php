@@ -12,7 +12,8 @@ class Inventory extends Model
     protected $fillable = [
         'item_name',
         'item_code',
-        'status'
+        'status',
+        'is_deleted'
     ];
     
 }

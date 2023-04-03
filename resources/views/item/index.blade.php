@@ -7,10 +7,13 @@
     </x-slot>
 
     <div class="max-w-7xl mx-auto p-8 mt-5">
-        <Link modal href="{{route('item.create')}}" class="btn btn-primary mb-2">
+        <Link modal href="{{route('item.create')}}" style="background-color:#aeaadf;padding:10px;border-radius:5px;margin-right:15px;">
                     Create
         </Link>
-        <x-splade-table :for="$item">
+        <Link href="{{route('deleteditem.index')}}" style="background-color:#aeaadf;padding:10px;border-radius:5px;">
+                    Deleted Item
+        </Link>
+        <x-splade-table :for="$item" class="mt-5">
             @cell('action', $item)
                 <Link modal href="{{ route('item.edit', $item->id)}}" class="btn btn-primary">
                     Edit

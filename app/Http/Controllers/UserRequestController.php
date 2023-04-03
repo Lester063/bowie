@@ -112,12 +112,17 @@ class UserRequestController extends Controller
         $isExist = Inventory::where('id', $request->item_id)->exists();
         $item=Inventory::find($request->item_id);
         $user_request=UserRequest::find($id);
+        // $user_request['status']!='PROCESSED' -to be able to update the request that is currently on process on the item
         if ($isExist &&$item['status'] === 'PROCESSED' && $user_request['status']!='PROCESSED') {
             Toast::warning("Item not available at the moment.");
             return redirect()->route('request.index');
         }
-        if ($isExist && $item['status'] === 'PROCESSING' && $user_request['status'] != 'PROCESSING') {
-            Toast::warning("Item has been processing with other user.");
+        else if ($isExist && $item['status'] === 'PROCESSING' && $user_request['status'] != 'PROCESSING') {
+            Toast::warning("Item is currently being processed with other user.");
+            return redirect()->route('request.index');
+        }
+        else if ($item['is_deleted'] == '1') {
+            Toast::warning("Item is deleted.");
             return redirect()->route('request.index');
         }
         else{
