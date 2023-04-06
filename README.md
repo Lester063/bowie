@@ -20,7 +20,7 @@
         -Normal user cannot create item
         -Normal user cannot edit item
         -Normal user cannot delete item
-        -Normal user cannot view nor restore item
+        -Normal user cannot view nor restore deleted item
    -Request
         -Admin can view all the requests
         -Admin can request an item for specific user through ID's (User ID, and Item ID)
