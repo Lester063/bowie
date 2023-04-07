@@ -14,6 +14,33 @@
         <!-- Scripts -->
         @vite(['resources/js/app.js'])
         @spladeHead
+        <style>
+            .editButton {
+                background-color:#aeaadf;
+                color:#fff;
+                padding:5px;
+                border-radius:5px;
+            }
+            .greenButton {
+                background-color:green;
+                color:#fff;
+                width:fit-content;
+                padding:5px;
+                border-radius:5px;
+            }
+            .redButton {
+                background-color:red;
+                color:#fff;
+                width:fit-content;
+                padding:5px;
+                border-radius:5px;
+            }
+            .genButton {
+                background-color:#aeaadf;
+                padding:10px;
+                border-radius:5px;
+            }
+        </style>
     </head>
     <body class="font-sans antialiased">
         @splade

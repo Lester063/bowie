@@ -71,11 +71,15 @@ class UserRequestController extends Controller
         if($verify['status']=='PROCESSED') {
             Toast::warning('Item has been added to other user.');
         }
+        else if($verify['status']=='PROCESSING') {
+            Toast::warning('Item is being processed with other user.');
+        }
         else {
             $user_request=UserRequest::create([
                 'item_id'=>$request['item_id'],
                 'user_id'=>$request['user_id'],
                 'status'=>'PENDING',
+                'is_returned'=>'0'
             ]);
             Toast::title('Request added successfully');
         }

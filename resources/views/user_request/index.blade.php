@@ -2,7 +2,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Request -Admin') }}
+            {{ __('Request') }}
         </h2>
     </x-slot>
 
@@ -16,18 +16,18 @@
             @endcell
             @cell('user_requests.status', $user_request)
                 @if($user_request['ur_status'] == 'PROCESSED')
-                    <p style='background-color:green;color:#fff;width:fit-content;padding:5px;border-radius:5px;'>{{$user_request['ur_status']}}</p>
+                    <p class="greenButton">{{$user_request['ur_status']}}</p>
                 @else
-                    <p style='background-color:red;color:#fff;width:fit-content;padding:5px;border-radius:5px;'>{{$user_request['ur_status']}}</p>
+                    <p class="redButton">{{$user_request['ur_status']}}</p>
                 @endif
     
             @endcell
             @cell('action', $user_request)
-                <Link modal href="{{ route('request.edit', $user_request->ur_id)}}" class="btn btn-primary">
-                    Edit {{$user_request->ur_id}}
+                <Link modal href="{{ route('request.edit', $user_request->ur_id)}}" class="genButton">
+                    Edit
                 </Link>
                 <x-splade-form method="DELETE" :action="route('request.destroy',$user_request->id)" confirm>
-                    <x-splade-submit style="background-color:red">Delete</x-splade-submit>
+                    <x-splade-submit style="background-color:red" class="mt-3">Delete</x-splade-submit>
                 </x-splade-form>
 
             @endcell

@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\UserRequestController;
+use App\Http\Controllers\DeletedItemController;
 use Illuminate\Support\Facades\Route;
 
 
