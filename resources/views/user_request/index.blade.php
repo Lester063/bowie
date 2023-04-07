@@ -7,10 +7,10 @@
     </x-slot>
 
     <div class="max-w-7xl mx-auto p-8 mt-5">
-        <Link modal href="{{route('request.create')}}" class="btn btn-primary mb-2">
+        <Link modal href="{{route('request.create')}}" class="genButton">
                     Create
         </Link>
-        <x-splade-table :for="$user_request">
+        <x-splade-table :for="$user_request" class="mt-3">
             @cell('users.name', $user_request)
                 <p>{{$user_request['name']}}</p>
             @endcell
