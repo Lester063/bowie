@@ -42,6 +42,8 @@ Route::middleware('splade')->group(function () {
         Route::resource('/item',InventoryController::class);
         Route::resource('/request',UserRequestController::class);
         Route::resource('/deleteditem',DeletedItemController::class);
+        Route::get('/viewusers',[ProfileController::class, 'index']);
+        Route::get('/viewuserrequest/{id}',[ProfileController::class, 'show'])->name('viewuser.request');
 
         //user view own request
         Route::get('/userrequest',[UserRequestController::class, 'userrequest'])->name('user.userrequest');

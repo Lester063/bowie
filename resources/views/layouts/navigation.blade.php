@@ -17,6 +17,9 @@
                             {{ __('Dashboard') }}
                         </x-nav-link>
                         @if(auth()->user()->is_admin)
+                        <x-nav-link href="/viewusers">
+                            {{ __('View Users') }}
+                        </x-nav-link>
                         <x-nav-link href="{{ route('item.index') }}">
                             {{ __('Item') }}
                         </x-nav-link>
@@ -89,6 +92,9 @@
                     {{ __('Dashboard') }}
                 </x-responsive-nav-link>
                 @if(auth()->user()->is_admin){
+                <x-responsive-nav-link href="/viewusers">
+                    {{ __('View Users') }}
+                </x-responsive-nav-link>
                 <x-responsive-nav-link href="{{ route('item.index') }}">
                     {{ __('Item') }}
                 </x-responsive-nav-link>
