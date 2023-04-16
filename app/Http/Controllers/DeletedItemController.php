@@ -89,10 +89,17 @@ class DeletedItemController extends Controller
             'is_deleted' => 'required',
         ]);
         $item=Inventory::find($id);
-        $item->update([
-            'is_deleted'=>'0'
-        ]);
-        Toast::title('Item restored successfully.');
+        $isExist=$item->where('item_code',$item['item_code'])->where('is_deleted','0')->exists();
+        if($isExist) {
+            Toast::warning('Item with the same code does exist on database.');
+        }
+        else {
+            if($item['item_code'])
+            $item->update([
+                'is_deleted'=>'0'
+            ]);
+            Toast::title('Item restored successfully.');
+        }
         return redirect()->route('deleteditem.index');
     }
 
