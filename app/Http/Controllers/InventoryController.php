@@ -11,16 +11,13 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Support\Collection;
 use ProtoneMedia\Splade\Facades\Toast;
+//use Response;
 
 class InventoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function indexx(Request $request)
-    {
-        return 'admin';
-    }
     public function index(Request $request)
     {
         $globalSearch = AllowedFilter::callback('global', function ($query, $value) {
@@ -70,7 +67,7 @@ class InventoryController extends Controller
             'item_name'=>'required',
             'item_code'=>'required',
         ]);
-        $verify = Inventory::where('item_code', $request->item_code)->exists();
+        $verify = Inventory::where('item_code', $request->item_code)->where('is_deleted','0')->exists();
         if($verify) {
             Toast::warning('Item code already exist.');
         }
@@ -82,7 +79,10 @@ class InventoryController extends Controller
                 'is_deleted'=>'0',
             ]);
             Toast::title('Item added successfully.');
+            //return Response::json($item);
+            
         }
+        
         return redirect()->route('item.index');
         
     }
