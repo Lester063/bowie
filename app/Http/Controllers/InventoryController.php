@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+//use Illuminate\Http\Response;
 use ProtoneMedia\Splade\SpladeTable;
 use App\Models\Inventory;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Support\Collection;
 use ProtoneMedia\Splade\Facades\Toast;
-//use Response;
+use Response;
 
 class InventoryController extends Controller
 {
@@ -112,7 +112,7 @@ class InventoryController extends Controller
             'item_name' => 'required',
             'item_code' => 'required',
         ]);
-        $verify = Inventory::where('item_code', $request->item_code)->exists();
+        $verify = Inventory::where('item_code', $request->item_code)->where('is_deleted','0')->exists();
         $item=Inventory::find($id);
         if ($verify && $item['item_code'] !== $request['item_code']) {
             Toast::warning("Code already exist.");
